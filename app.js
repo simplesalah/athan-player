@@ -11,7 +11,7 @@ const weekdayEnabledPrayers = ['fajr', 'isha']
 const weekendEnabledPrayers = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha']
 const athanFile = 'athan.mp3'
 const fajrAthanFile = 'athan.mp3'
-const omxplayerOutput = 'local' //'local' for headphone jack, 'hdmi' for HDMI, or '' to attempt to auto-detect
+const omxplayerOutput = 'local' //'local' for headphone jack, 'hdmi' for HDMI
 const debug = true;
 // ------ Config end ------
 
