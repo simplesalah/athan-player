@@ -11,7 +11,7 @@ This code lets you use a Raspberry Pi to play athan audio at prayer times.
     4. `exit #don't stay root`
 - Download this repo to the Pi: `git clone https://github.com/simplesalah/athan-player.git`
 - Copy [athan-player.desktop](athan-player.desktop) to `~/.config/autostart`. 
-    - Ensure that the path to [app.js](app.js) in the [athan-player.desktop](athan-player.desktop) file is correct. 
+    - Ensure that the path to [app.js](app.js) in the `~/.config/autostart/athan-player.desktop` file is correct. 
 - Connect your speaker to your Pi.
 - Update the config section of [app.js](app.js) with your settings.
 - Restart the Pi, and you should be good to go! 
