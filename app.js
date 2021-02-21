@@ -11,7 +11,7 @@ const weekdayEnabledPrayers = ['fajr', 'isha']
 const weekendEnabledPrayers = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha']
 const athanFile = 'athan.mp3'
 const fajrAthanFile = 'athan.mp3'
-const omxplayerOutput = 'local' //'local' for headphone jack, 'hdmi' for HDMI
+const omxplayerOutput = '' //'' to auto-detect, 'local' for headphone jack, or 'hdmi' for HDMI
 const debug = true;
 // ------ Config end ------
 
@@ -119,12 +119,25 @@ function todayIsWeekday() {
 
 function playAthan(prayer) {
     if (debug) console.log(`Playing athan for ${prayer}.`)
-    if (prayer == 'fajr') {
-        child_process.execSync(`omxplayer -o ${omxplayerOutput} --no-keys ${fajrAthanFile} &`); //FIXME RCE vuln
-        // child_process.execSync(`afplay ${fajrAthanFile} &`); //FIXME RCE vuln
+
+    let args = ['--no-keys'];
+    if (omxplayerOutput) {
+        args.push('-o');
+        args.push(omxplayerOutput);
     }
-    else {
-        child_process.execSync(`omxplayer -o ${omxplayerOutput} --no-keys ${athanFile} &`); //FIXME RCE vuln
-        // child_process.execSync(`afplay ${athanFile} &`); //FIXME RCE vuln
-    }
+    if (prayer == 'fajr')
+        args.push(fajrAthanFile);
+    else
+        args.push(athanFile);
+
+    child_process.execFileSync('omxplayer', args)
+}
+
+function playAthanMac(prayer) {
+    let args = [];
+    if (prayer == 'fajr')
+        args.push(fajrAthanFile);
+    else
+        args.push(athanFile);
+    child_process.execFileSync('afplay', args)
 }
