@@ -1,0 +1,4 @@
+[Desktop Entry]
+Name=AthanClock
+Type=Application
+Exec=/usr/bin/nodejs /home/pi/athan-clock/app.js
