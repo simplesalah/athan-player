@@ -17,7 +17,7 @@ const debug = true;
 
 (async function main() {
     while (true) {
-        if (debug) console.log(`Starting main loop.`);
+        debug(`Starting main loop.`);
 
         let {nextPrayer, nextAthanTime} = getNextAthan();
         
@@ -48,9 +48,9 @@ function getNextAthan() {
     }
 
     if (nextPrayer) {
-        let nextAthanTime = timeToDate( athanTimes[nextPrayer] )
+        let nextAthanTime = timeToDate( athanTimes[nextPrayer] );
 
-        if (debug) console.log(`Next prayer is ${nextPrayer} at ${nextAthanTime}.`)
+        debug(`Next prayer is ${nextPrayer} at ${nextAthanTime}.`);
         return {nextPrayer, nextAthanTime};
     }
     else {
@@ -62,7 +62,7 @@ function getNextAthan() {
         let nextAthanTime = timeToDate( athanTimes[nextPrayer] );
         nextAthanTime = addDays(nextAthanTime, 1); //Having to do this is non-intuitive. Improve your APIs.
 
-        if (debug) console.log(`Next prayer is ${nextPrayer} at ${nextAthanTime}.`)
+        debug(`Next prayer is ${nextPrayer} at ${nextAthanTime}.`);
         return {nextPrayer, nextAthanTime};
     }
 }
@@ -86,7 +86,7 @@ function timeToDate(time_24) {
     let day = today.getDate();
     let dd = day < 10 ? `0${day}` : `${day}`
 
-    if (debug) console.log(`${yyyy}-${mm}-${dd}T${time_24}:00`)
+    debug(`${yyyy}-${mm}-${dd}T${time_24}:00`);
     return new Date(`${yyyy}-${mm}-${dd}T${time_24}:00`)
 }
 
@@ -100,7 +100,7 @@ function addDays(date, days) {
 async function sleepTill(time) {
     let ms = time - new Date();
     if (ms > 0) {
-        if (debug) console.log(`Sleeping for ${ms} ms.`)
+        debug(`Sleeping for ${ms} ms.`);
         await new Promise(resolve => setTimeout(resolve, ms));
     }
 }
@@ -118,7 +118,7 @@ function todayIsWeekday() {
 }
 
 function playAthan(prayer) {
-    if (debug) console.log(`Playing athan for ${prayer}.`)
+    debug(`Playing athan for ${prayer}.`);
 
     let args = ['--no-keys'];
     if (omxplayerOutput) {
@@ -140,4 +140,10 @@ function playAthanMac(prayer) {
     else
         args.push(athanFile);
     child_process.execFileSync('afplay', args)
+}
+
+function debug(msg) {
+    if (debug) {
+        console.log(msg);
+    }
 }
