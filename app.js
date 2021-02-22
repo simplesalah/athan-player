@@ -12,7 +12,7 @@ const weekendEnabledPrayers = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha']
 const athanFile = 'athan.mp3'
 const fajrAthanFile = 'athan.mp3'
 const omxplayerOutput = '' //'' to auto-detect, 'local' for headphone jack, or 'hdmi' for HDMI
-const debug = true;
+const debugEnabled = true;
 // ------ Config end ------
 
 (async function main() {
@@ -143,7 +143,7 @@ function playAthanMac(prayer) {
 }
 
 function debug(msg) {
-    if (debug) {
+    if (debugEnabled) {
         console.log(msg);
     }
 }
