@@ -1,4 +1,0 @@
-[Desktop Entry]
-Name=AthanPlayer
-Type=Application
-Exec=/usr/bin/nodejs /home/pi/athan-player/app.js
