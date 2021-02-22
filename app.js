@@ -5,12 +5,16 @@ const prayTimes = require('./PrayTimes.js')
 //TODO: move to file
 const latitude = 21.427378; //negative value for South, positive for North
 const longitute = 39.814838; //negative value for West, positive for East
-const calcMethod = 'ISNA'; //or MWL, Makkah, Karachi, etc
-const asrMethod = 'Standard'; //either Hanafi or Standard
+
+const athanFile = '/home/pi/athan-player/athan.mp3'
+const fajrAthanFile = '/home/pi/athan-player/athan.mp3'
+
 const weekdayEnabledPrayers = ['fajr', 'isha']
 const weekendEnabledPrayers = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha']
-const athanFile = 'athan.mp3'
-const fajrAthanFile = 'athan.mp3'
+
+const calcMethod = 'ISNA'; //or MWL, Makkah, Karachi, etc
+const asrMethod = 'Standard'; //either Hanafi or Standard
+
 const omxplayerOutput = '' //'' to auto-detect, 'local' for headphone jack, or 'hdmi' for HDMI
 const debugEnabled = true;
 // ------ Config end ------
