@@ -12,9 +12,10 @@ This code lets you use a Raspberry Pi to play athan audio at prayer times.
 - Download this repo to the Pi: `git clone https://github.com/simplesalah/athan-player.git`
 - Use crontab to launch the script at startup:
     1. Run `crontab -e` 
-    2. Add this line to the crontab file: `@reboot nodejs /home/pi/athan-player/app.js` (use your actual app path). 
+    2. Add this line to the crontab file: `@reboot sleep 5m && nodejs /home/pi/athan-player/app.js`.
+        * **Update the app.js path to your actual path.** 
 - Connect your speaker to your Pi.
-- **Update the config section of [app.js](app.js) with your settings. Ensure each line is correct!**
+- **Update the config section of [app.js](app.js) with your settings. Ensure each line is correct, especially file paths.**
 - Restart the Pi, and you should be good to go! 
     - Restart again whenever you update the config.
 
