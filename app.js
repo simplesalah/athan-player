@@ -7,7 +7,7 @@ const latitude = 21.427378; //negative value for South, positive for North
 const longitute = 39.814838; //negative value for West, positive for East
 
 const athanFile = '/home/pi/athan-player/athan.mp3'
-const fajrAthanFile = '/home/pi/athan-player/athan.mp3'
+const fajrAthanFile = '/home/pi/athan-player/athan-fajr.mp3'
 
 const weekdayEnabledPrayers = ['fajr', 'isha']
 const weekendEnabledPrayers = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha']
