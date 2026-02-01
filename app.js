@@ -1,5 +1,5 @@
 const child_process = require('child_process');
-const prayTimes = require('./PrayTimes.js')
+const prayTimes = require('./PrayTimes.js');
 
 // ------ Config ------
 //TODO: move to file
@@ -15,7 +15,6 @@ const weekendEnabledPrayers = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha']
 const calcMethod = 'ISNA'; //or MWL, Makkah, Karachi, etc
 const asrMethod = 'Standard'; //either Hanafi or Standard
 
-const omxplayerOutput = '' //'' to auto-detect, 'local' for headphone jack, or 'hdmi' for HDMI
 const debugEnabled = true;
 // ------ Config end ------
 
@@ -124,17 +123,18 @@ function todayIsWeekday() {
 function playAthan(prayer) {
     debug(`Playing athan for ${prayer}.`);
 
-    let args = ['--no-keys'];
-    if (omxplayerOutput) {
-        args.push('-o');
-        args.push(omxplayerOutput);
-    }
+    let args = [];
     if (prayer == 'fajr')
         args.push(fajrAthanFile);
     else
         args.push(athanFile);
 
-    child_process.execFileSync('omxplayer', args)
+    const env = {
+      ...process.env,
+      XDG_RUNTIME_DIR: `/run/user/${process.getuid()}`
+    };
+
+    child_process.execFileSync('mpg123', args, {env})
 }
 
 function playAthanMac(prayer) {
