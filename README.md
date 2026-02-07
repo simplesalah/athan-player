@@ -7,7 +7,7 @@ On your Raspberry Pi:
 2. Install tools: `sudo apt install nodejs mpg123`
 3. Download this repo: `git clone https://github.com/simplesalah/athan-player.git`
 4. Navigate to the cloned repo, and run `npm install`.
-5. Update `config.yaml`.
+5. Run `cp config-template.yaml config.yaml`, and edit the settings in `config.yaml`.
 6. Use crontab to launch the script at startup:
     1. Run `crontab -e` 
     2. Add this line to the crontab file: `@reboot sleep 5m && node /home/pi/athan-player/app.js`.
