@@ -1,0 +1,23 @@
+# Location: negative latitude = South, positive = North; negative longitude = West, positive = East
+latitude: 21.427378
+longitude: 39.814838
+
+athanFile: athan.mp3
+fajrAthanFile: athan-fajr.mp3
+
+weekdayEnabledPrayers:
+  - fajr
+  - isha
+weekendEnabledPrayers:
+  - fajr
+  - dhuhr
+  - asr
+  - maghrib
+  - isha
+
+# Calculation method: ISNA, MWL, Makkah, Karachi, etc.
+calcMethod: ISNA
+# Asr method: Hanafi or Standard
+asrMethod: Standard
+
+debugEnabled: true

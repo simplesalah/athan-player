@@ -1,0 +1,9 @@
+{
+  "name": "athan-player",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  }
+}

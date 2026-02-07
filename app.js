@@ -1,22 +1,25 @@
 const child_process = require('child_process');
+const fs = require('fs');
+const path = require('path');
+const yaml = require('js-yaml');
 const prayTimes = require('./PrayTimes.js');
 
-// ------ Config ------
-//TODO: move to file
-const latitude = 21.427378; //negative value for South, positive for North
-const longitute = 39.814838; //negative value for West, positive for East
+const configPath = path.join(__dirname, 'config.yaml');
+const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
+const {
+    latitude,
+    longitude,
+    athanFile,
+    fajrAthanFile,
+    weekdayEnabledPrayers,
+    weekendEnabledPrayers,
+    calcMethod,
+    asrMethod,
+    debugEnabled,
+} = config;
 
-const athanFile = '/home/pi/athan-player/athan.mp3'
-const fajrAthanFile = '/home/pi/athan-player/athan-fajr.mp3'
-
-const weekdayEnabledPrayers = ['fajr', 'isha']
-const weekendEnabledPrayers = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha']
-
-const calcMethod = 'ISNA'; //or MWL, Makkah, Karachi, etc
-const asrMethod = 'Standard'; //either Hanafi or Standard
-
-const debugEnabled = true;
-// ------ Config end ------
+const athanFilePath = path.join(__dirname, athanFile);
+const fajrAthanFilePath = path.join(__dirname, fajrAthanFile);
 
 (async function main() {
     while (true) {
@@ -75,7 +78,7 @@ function getNextAthan() {
 function getAthanTimes(date) {
     prayTimes.setMethod(calcMethod); 
     prayTimes.adjust( {asr: asrMethod} );
-    return prayTimes.getTimes(date, [latitude, longitute], 'auto', 'auto', '24h');
+    return prayTimes.getTimes(date, [latitude, longitude], 'auto', 'auto', '24h');
 }
 
 //convert a 24 hour time (e.g. "23:11") to a Date object of today's date.
@@ -125,9 +128,9 @@ function playAthan(prayer) {
 
     let args = [];
     if (prayer == 'fajr')
-        args.push(fajrAthanFile);
+        args.push(fajrAthanFilePath);
     else
-        args.push(athanFile);
+        args.push(athanFilePath);
 
     const env = {
       ...process.env,
@@ -140,9 +143,9 @@ function playAthan(prayer) {
 function playAthanMac(prayer) {
     let args = [];
     if (prayer == 'fajr')
-        args.push(fajrAthanFile);
+        args.push(fajrAthanFilePath);
     else
-        args.push(athanFile);
+        args.push(athanFilePath);
     child_process.execFileSync('afplay', args)
 }
 
