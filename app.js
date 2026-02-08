@@ -9,8 +9,6 @@ const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
 const {
     latitude,
     longitude,
-    athanFile,
-    fajrAthanFile,
     weekdayEnabledPrayers,
     weekendEnabledPrayers,
     calcMethod,
@@ -18,8 +16,22 @@ const {
     debugEnabled,
 } = config;
 
-const athanFilePath = path.join(__dirname, athanFile);
-const fajrAthanFilePath = path.join(__dirname, fajrAthanFile);
+const AUDIO_DIRS = {
+    fajr: path.join(__dirname, 'audio-files', 'fajr'),
+    regular: path.join(__dirname, 'audio-files', 'regular'),
+};
+
+function getRandomAudioFile(dirPath) {
+    const files = fs.readdirSync(dirPath).filter((f) =>
+        /\.(mp3|m4a|wav|ogg)$/i.test(path.extname(f))
+    );
+    if (files.length === 0) {
+        console.log(`No audio files in ${dirPath}`);
+        return null;
+    }
+    const chosen = files[Math.floor(Math.random() * files.length)];
+    return path.join(dirPath, chosen);
+}
 
 (async function main() {
     while (true) {
@@ -126,27 +138,25 @@ function todayIsWeekday() {
 function playAthan(prayer) {
     debug(`Playing athan for ${prayer}.`);
 
-    let args = [];
-    if (prayer == 'fajr')
-        args.push(fajrAthanFilePath);
-    else
-        args.push(athanFilePath);
+    const dir = prayer === 'fajr' ? AUDIO_DIRS.fajr : AUDIO_DIRS.regular;
+    const filePath = getRandomAudioFile(dir);
+    if (!filePath) return;
+    debug(`Selected: ${path.basename(filePath)}`);
 
     const env = {
       ...process.env,
       XDG_RUNTIME_DIR: `/run/user/${process.getuid()}`
     };
 
-    child_process.execFileSync('mpg123', args, {env})
+    child_process.execFileSync('mpg123', [filePath], {env})
 }
 
 function playAthanMac(prayer) {
-    let args = [];
-    if (prayer == 'fajr')
-        args.push(fajrAthanFilePath);
-    else
-        args.push(athanFilePath);
-    child_process.execFileSync('afplay', args)
+    const dir = prayer === 'fajr' ? AUDIO_DIRS.fajr : AUDIO_DIRS.regular;
+    const filePath = getRandomAudioFile(dir);
+    if (!filePath) return;
+    debug(`Selected: ${path.basename(filePath)}`);
+    child_process.execFileSync('afplay', [filePath])
 }
 
 function debug(msg) {

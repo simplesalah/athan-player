@@ -16,5 +16,8 @@ On your Raspberry Pi:
 8. Restart the Pi, and you should be good to go!
     - Restart again whenever you update the config.
 
+## Custom athan
+You may select your own athan audio files and place them in [audio-files/](./audio-files). They will get randomly selected at athan time.
+
 ## PrayTimes library
 We utilize the useful [PrayTimes](http://praytimes.org/) library, but note we added an export line to the end. So you need to use the version in this repo.
