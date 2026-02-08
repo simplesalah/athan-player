@@ -146,7 +146,8 @@ function playAthan(prayer) {
     const isMac = process.platform === 'darwin';
     if (isMac) {
         child_process.execFileSync('afplay', [filePath]);
-    } else {
+    } 
+    else {
         const env = {
             ...process.env,
             XDG_RUNTIME_DIR: `/run/user/${process.getuid()}`

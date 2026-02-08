@@ -12,7 +12,7 @@ On your Raspberry Pi:
     1. Run `crontab -e` 
     2. Add this line to the crontab file: `@reboot sleep 5m && node /home/pi/athan-player/app.js`.
         * **But first correct the app.js file path.**
-7. Connect your speaker to your Pi.
+7. Connect your speaker to your Pi. (For better quality, use a DAC.)
 8. Restart the Pi, and you should be good to go!
     - Restart again whenever you update the config.
 
