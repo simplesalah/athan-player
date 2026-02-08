@@ -4,7 +4,7 @@ This code lets you use a Raspberry Pi to play athan audio at prayer times.
 ## Set up
 On your Raspberry Pi:
 1. Run `timedatectl`, ensure your timezone is correct.
-2. Install tools: `sudo apt install nodejs mpg123`
+2. Install tools: `sudo apt install nodejs npm mpg123`
 3. Download this repo: `git clone https://github.com/simplesalah/athan-player.git`
 4. Navigate to the cloned repo, and run `npm install`.
 5. Run `cp config-template.yaml config.yaml`, and edit the settings in `config.yaml`.
