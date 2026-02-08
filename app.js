@@ -1,22 +1,25 @@
 const child_process = require('child_process');
+const fs = require('fs');
+const path = require('path');
+const yaml = require('js-yaml');
 const prayTimes = require('./PrayTimes.js');
 
-// ------ Config ------
-//TODO: move to file
-const latitude = 21.427378; //negative value for South, positive for North
-const longitute = 39.814838; //negative value for West, positive for East
+const configPath = path.join(__dirname, 'config.yaml');
+const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
+const {
+    latitude,
+    longitude,
+    weekdayEnabledPrayers,
+    weekendEnabledPrayers,
+    calcMethod,
+    asrMethod,
+    debugEnabled,
+} = config;
 
-const athanFile = '/home/pi/athan-player/athan.mp3'
-const fajrAthanFile = '/home/pi/athan-player/athan-fajr.mp3'
-
-const weekdayEnabledPrayers = ['fajr', 'isha']
-const weekendEnabledPrayers = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha']
-
-const calcMethod = 'ISNA'; //or MWL, Makkah, Karachi, etc
-const asrMethod = 'Standard'; //either Hanafi or Standard
-
-const debugEnabled = true;
-// ------ Config end ------
+const AUDIO_DIRS = {
+    fajr: path.join(__dirname, 'audio-files', 'fajr'),
+    regular: path.join(__dirname, 'audio-files', 'regular'),
+};
 
 (async function main() {
     while (true) {
@@ -75,7 +78,7 @@ function getNextAthan() {
 function getAthanTimes(date) {
     prayTimes.setMethod(calcMethod); 
     prayTimes.adjust( {asr: asrMethod} );
-    return prayTimes.getTimes(date, [latitude, longitute], 'auto', 'auto', '24h');
+    return prayTimes.getTimes(date, [latitude, longitude], 'auto', 'auto', '24h');
 }
 
 //convert a 24 hour time (e.g. "23:11") to a Date object of today's date.
@@ -120,30 +123,37 @@ function todayIsWeekday() {
     return day != 0 && day != 6;
 }
 
+function getRandomAudioFile(dirPath) {
+    const files = fs.readdirSync(dirPath).filter((f) =>
+        /\.(mp3|m4a|wav|ogg)$/i.test(path.extname(f))
+    );
+    if (files.length === 0) {
+        console.log(`No audio files in ${dirPath}`);
+        return null;
+    }
+    const chosen = files[Math.floor(Math.random() * files.length)];
+    return path.join(dirPath, chosen);
+}
+
 function playAthan(prayer) {
     debug(`Playing athan for ${prayer}.`);
 
-    let args = [];
-    if (prayer == 'fajr')
-        args.push(fajrAthanFile);
-    else
-        args.push(athanFile);
+    const dir = prayer === 'fajr' ? AUDIO_DIRS.fajr : AUDIO_DIRS.regular;
+    const filePath = getRandomAudioFile(dir);
+    if (!filePath) return;
+    debug(`Selected: ${path.basename(filePath)}`);
 
-    const env = {
-      ...process.env,
-      XDG_RUNTIME_DIR: `/run/user/${process.getuid()}`
-    };
-
-    child_process.execFileSync('mpg123', args, {env})
-}
-
-function playAthanMac(prayer) {
-    let args = [];
-    if (prayer == 'fajr')
-        args.push(fajrAthanFile);
-    else
-        args.push(athanFile);
-    child_process.execFileSync('afplay', args)
+    const isMac = process.platform === 'darwin';
+    if (isMac) {
+        child_process.execFileSync('afplay', [filePath]);
+    } 
+    else {
+        const env = {
+            ...process.env,
+            XDG_RUNTIME_DIR: `/run/user/${process.getuid()}`
+        };
+        child_process.execFileSync('mpg123', [filePath], {env});
+    }
 }
 
 function debug(msg) {
