@@ -21,18 +21,6 @@ const AUDIO_DIRS = {
     regular: path.join(__dirname, 'audio-files', 'regular'),
 };
 
-function getRandomAudioFile(dirPath) {
-    const files = fs.readdirSync(dirPath).filter((f) =>
-        /\.(mp3|m4a|wav|ogg)$/i.test(path.extname(f))
-    );
-    if (files.length === 0) {
-        console.log(`No audio files in ${dirPath}`);
-        return null;
-    }
-    const chosen = files[Math.floor(Math.random() * files.length)];
-    return path.join(dirPath, chosen);
-}
-
 (async function main() {
     while (true) {
         debug(`Starting main loop.`);
@@ -133,6 +121,18 @@ function passesConfig(prayer) {
 function todayIsWeekday() {
     let day = new Date().getDay();
     return day != 0 && day != 6;
+}
+
+function getRandomAudioFile(dirPath) {
+    const files = fs.readdirSync(dirPath).filter((f) =>
+        /\.(mp3|m4a|wav|ogg)$/i.test(path.extname(f))
+    );
+    if (files.length === 0) {
+        console.log(`No audio files in ${dirPath}`);
+        return null;
+    }
+    const chosen = files[Math.floor(Math.random() * files.length)];
+    return path.join(dirPath, chosen);
 }
 
 function playAthan(prayer) {
