@@ -143,20 +143,16 @@ function playAthan(prayer) {
     if (!filePath) return;
     debug(`Selected: ${path.basename(filePath)}`);
 
-    const env = {
-      ...process.env,
-      XDG_RUNTIME_DIR: `/run/user/${process.getuid()}`
-    };
-
-    child_process.execFileSync('mpg123', [filePath], {env})
-}
-
-function playAthanMac(prayer) {
-    const dir = prayer === 'fajr' ? AUDIO_DIRS.fajr : AUDIO_DIRS.regular;
-    const filePath = getRandomAudioFile(dir);
-    if (!filePath) return;
-    debug(`Selected: ${path.basename(filePath)}`);
-    child_process.execFileSync('afplay', [filePath])
+    const isMac = process.platform === 'darwin';
+    if (isMac) {
+        child_process.execFileSync('afplay', [filePath]);
+    } else {
+        const env = {
+            ...process.env,
+            XDG_RUNTIME_DIR: `/run/user/${process.getuid()}`
+        };
+        child_process.execFileSync('mpg123', [filePath], {env});
+    }
 }
 
 function debug(msg) {
